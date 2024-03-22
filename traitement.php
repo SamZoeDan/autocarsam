@@ -15,24 +15,27 @@ if ($conn->connect_error) {
 // Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collecter les données du formulaire
-    $nom = $conn->real_escape_string($_POST['nom']);
-    $prenom = $conn->real_escape_string($_POST['prenom']);
-    $telephone = $conn->real_escape_string($_POST['telephone']);
-    $date_naissance = $conn->real_escape_string($_POST['date_naissance']);
-    $voiture = $conn->real_escape_string($_POST['voiture']);
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $telephone = $_POST['telephone'];
+    $date_naissance = $_POST['date_naissance'];
+    $voiture = $_POST['voiture'];
 
     // Préparer la requête SQL
-    $sql = "INSERT INTO commande_formulaire (nom, prenom, telephone, date_naissance, voiture)
-    VALUES ('$nom', '$prenom', '$telephone', '$date_naissance', '$voiture')";
+    $stmt = $conn->prepare("INSERT INTO commande_formulaire (nom, prenom, telephone, date_naissance, voiture) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $nom, $prenom, $telephone, $date_naissance, $voiture);
 
     // Exécuter la requête SQL
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute() === TRUE) {
       echo "Nouvelle commande enregistrée avec succès.";
     } else {
-      echo "Erreur: " . $sql . "<br>" . $conn->error;
+      echo "Erreur: " . $stmt->error;
     }
 
-    // Fermer la connexion
-    $conn->close();
+    // Fermer la requête préparée
+    $stmt->close();
 }
 
+// Fermer la connexion
+$conn->close();
+?>
