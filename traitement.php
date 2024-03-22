@@ -1,5 +1,5 @@
 <?php
-$servername = "dbautocar.mysql.database.azure.com"; // ou l'adresse de votre serveur
+$servername = "dbautocar.mysql.database.azure.com"; 
 $username = "samoli";
 $password = "Autocar24";
 $dbname = "autocar";
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $voiture = $conn->real_escape_string($_POST['voiture']);
 
     // Préparer la requête SQL
-    $sql = "INSERT INTO commande_formulaire (nom, prenom, Telephone, Date_naissance, voiture)
+    $sql = "INSERT INTO commande_formulaire (nom, prenom, telephone, date_naissance, voiture)
     VALUES ('$nom', '$prenom', '$telephone', '$date_naissance', '$voiture')";
 
     // Exécuter la requête SQL
