@@ -14,7 +14,7 @@
 
 </head>
 <body>
-    <form action="traitement.php" method="post" class="formulaire-achat">
+    <form action="./traitement.php" method="post" class="formulaire-achat">
         <div class="input-group">
             <label for="nom">Nom:</label>
             <input type="text" id="nom" name="nom" required>
