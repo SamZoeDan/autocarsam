@@ -1,7 +1,7 @@
 <?php
-$servername = "localhost"; // ou l'adresse de votre serveur
-$username = "root";
-$password = "";
+$servername = "dbautocar.mysql.database.azure.com"; // ou l'adresse de votre serveur
+$username = "samoli";
+$password = "Autocar24";
 $dbname = "autocar";
 
 // Création de la connexion
