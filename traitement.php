@@ -1,11 +1,11 @@
 <?php
-$servername = "dbautocar.mysql.database.azure.com"; 
+$host = "dbautocar.mysql.database.azure.com"; 
 $username = "samoli";
 $password = "Autocar24";
 $dbname = "autocar";
 
 // Création de la connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($host, $username, $password, $dbname);
 
 // Vérifier la connexion
 if ($conn->connect_error) {
@@ -23,13 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Préparer la requête SQL
     $stmt = $conn->prepare("INSERT INTO commande_formulaire (nom, prenom, telephone, date_naissance, voiture) VALUES (?, ?, ?, ?, ?)");
+    if ($stmt === false) {
+        die("Erreur de préparation de la requête : " . $conn->error);
+    }
+
+    // Lier les paramètres à la déclaration préparée en tant que chaînes
     $stmt->bind_param("sssss", $nom, $prenom, $telephone, $date_naissance, $voiture);
 
     // Exécuter la requête SQL
     if ($stmt->execute() === TRUE) {
       echo "Nouvelle commande enregistrée avec succès.";
     } else {
-      echo "Erreur: " . $stmt->error;
+      echo "Erreur lors de l'exécution de la requête : " . $stmt->error;
     }
 
     // Fermer la requête préparée
