@@ -7,7 +7,7 @@ $dbname = 'autocar';
 // Création de la connexion
 $conn = mysqli_init();
 mysqli_ssl_set($conn, NULL, NULL, "C:\Users\samue\Downloads\DigiCertGlobalRootCA.crt.pem", NULL, NULL);
-mysqli_real_connect($conn, $host, $username, $password,  $dbname, 3307, MYSQLI_CLIENT_SSL);
+mysqli_real_connect($conn, $host, $username, $password,  $dbname, 3306, MYSQLI_CLIENT_SSL);
 
 
 // Vérifier la connexion
