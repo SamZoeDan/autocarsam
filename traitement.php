@@ -1,49 +1,38 @@
 <?php
-$host = 'dbautocar.mysql.database.azure.com';
-$username = 'samoli';
-$password = 'Autocar24';
-$dbname = 'autocar';
+$servername = "dbautocar.mysql.database.azure.com"; // ou l'adresse de votre serveur
+$username = "samoli";
+$password = "Autocar24";
+$dbname = "autocar";
 
 // Création de la connexion
-$conn = mysqli_init();
-mysqli_ssl_set($conn, NULL, NULL, "C:\Users\samue\Downloads\DigiCertGlobalRootCA.crt.pem", NULL, NULL);
-mysqli_real_connect($conn, $host, $username, $password,  $dbname, 3306, MYSQLI_CLIENT_SSL);
-
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Vérifier la connexion
-if(mysqli_connect_errno($conn)) {
-  die("Échec de la connexion: " .mysqli_connect_error());
+if ($conn->connect_error) {
+  die("Échec de la connexion: " . $conn->connect_error);
 }
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collecter les données du formulaire
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $telephone = $_POST['telephone'];
-    $date_naissance = $_POST['date_naissance'];
-    $voiture = $_POST['voiture'];
+    $nom = $conn->real_escape_string($_POST['nom']);
+    $prenom = $conn->real_escape_string($_POST['prenom']);
+    $telephone = $conn->real_escape_string($_POST['telephone']);
+    $date_naissance = $conn->real_escape_string($_POST['date_naissance']);
+    $voiture = $conn->real_escape_string($_POST['voiture']);
 
     // Préparer la requête SQL
-    $stmt = $conn->prepare("INSERT INTO commande_formulaire (nom, prenom, telephone, date_naissance, voiture) VALUES (?, ?, ?, ?, ?)");
-    if ($stmt === false) {
-        die("Erreur de préparation de la requête : " . $conn->error);
-    }
-
-    // Lier les paramètres à la déclaration préparée en tant que chaînes
-    $stmt->bind_param("sssss", $nom, $prenom, $telephone, $date_naissance, $voiture);
+    $sql = "INSERT INTO commande_formulaire (nom, prenom, telephone, date_naissance, voiture)
+    VALUES ('$nom', '$prenom', '$telephone', '$date_naissance', '$voiture')";
 
     // Exécuter la requête SQL
-    if ($stmt->execute() === TRUE) {
+    if ($conn->query($sql) === TRUE) {
       echo "Nouvelle commande enregistrée avec succès.";
     } else {
-      echo "Erreur lors de l'exécution de la requête : " . $stmt->error;
+      echo "Erreur: " . $sql . "<br>" . $conn->error;
     }
 
-    // Fermer la requête préparée
-    $stmt->close();
+    // Fermer la connexion
+    $conn->close();
 }
-
-// Fermer la connexion
-$conn->close();
 ?>
